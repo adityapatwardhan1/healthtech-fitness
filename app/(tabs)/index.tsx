@@ -1,62 +1,52 @@
-import { Image, StyleSheet, Platform, View } from 'react-native';
-
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
+import { Text, View, StyleSheet } from 'react-native';
 import Button from '@/components/Button';
 
-export default function HomeScreen() {
+export default function ShopScreen() {
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-
-      
-
-      {/*Footer Buttons */}
+    <View style={styles.container}>
+      <Text style={styles.title}>Profile</Text>
       <View style={styles.footerContainer}>
-        <Button label="Filler" />
+        <View style={styles.buttonStyle}>
+          <Button label="Balance" />
+        </View>
+        <View style={styles.buttonStyle}>
+          <Button label="Claims" />
+        </View>
       </View>
-
-    </ParallaxScrollView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
+  container: {
+    flex: 1,
+    backgroundColor: '#25292e',
+  },
+  header: {
     alignItems: 'center',
-    gap: 8,
   },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
+  title: {
+    color: '#fff',
+    textAlign: 'center',
+    fontSize: 32,
+    fontWeight: 'bold',
+    marginTop: 50,
   },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
+  content: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   footerContainer: {
-    justifyContent: 'center',  // Center the content
-    alignItems: 'center',      // Horizontally center the button
-    width: '100%',
-    paddingVertical: 15,
-    paddingHorizontal: 16,
-    backgroundColor: 'white',  // Optional: Add background color
+    padding: 2,
+    alignItems: 'center',
   },
-  
+  buttonStyle: {
+    width: '70%', 
+    marginBottom: 15, 
+    alignItems: 'center',
+  },
+  text: {
+    color: '#fff',
+  },
 });

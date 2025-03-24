@@ -59,10 +59,11 @@ export default function MapScreen() {
         >
           {places.map((place, index) => (
             <Marker
+              style = {styles.loc}
               key={index}
               coordinate={{ latitude: place.latitude, longitude: place.longitude }}
               title={place.name}
-              description={place.tasks.join(", ")}
+              description={"Tasks: "+ place.tasks.join(", ")}
             />
           ))}
         </MapView>
@@ -72,6 +73,10 @@ export default function MapScreen() {
 }
 
 const styles = StyleSheet.create({
+  loc: {
+    width: "150%",
+    height: "100%",
+  },
   container: {
     flex: 1,
   },
