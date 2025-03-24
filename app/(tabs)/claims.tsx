@@ -1,17 +1,12 @@
 import { Text, View, StyleSheet } from 'react-native';
 import Button from '@/components/Button';
 
-export default function ShopScreen() {
+export default function ClaimScreen() {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Profile</Text>
+      <Text style={styles.title}>Claims</Text>
       <View style={styles.footerContainer}>
-        <View style={styles.buttonStyle}>
-          <Button label="Balance" />
-        </View>
-        <View style={styles.buttonStyle}>
-          <Button label="Claims" />
-        </View>
+        <Button label="Claim" />
       </View>
     </View>
   );
@@ -39,11 +34,6 @@ const styles = StyleSheet.create({
   },
   footerContainer: {
     padding: 2,
-    alignItems: 'center',
-  },
-  buttonStyle: {
-    width: '70%', 
-    marginBottom: 15, 
     alignItems: 'center',
   },
   text: {

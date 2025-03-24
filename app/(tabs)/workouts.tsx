@@ -4,14 +4,9 @@ import Button from '@/components/Button';
 export default function ShopScreen() {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Profile</Text>
+      <Text style={styles.title}>Workouts</Text>
       <View style={styles.footerContainer}>
-        <View style={styles.buttonStyle}>
-          <Button label="Balance" />
-        </View>
-        <View style={styles.buttonStyle}>
-          <Button label="Claims" />
-        </View>
+        <Button label="My workouts" />
       </View>
     </View>
   );
@@ -39,11 +34,6 @@ const styles = StyleSheet.create({
   },
   footerContainer: {
     padding: 2,
-    alignItems: 'center',
-  },
-  buttonStyle: {
-    width: '70%', 
-    marginBottom: 15, 
     alignItems: 'center',
   },
   text: {
