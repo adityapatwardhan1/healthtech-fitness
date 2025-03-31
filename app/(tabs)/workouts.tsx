@@ -1,12 +1,13 @@
 import { Text, View, StyleSheet } from 'react-native';
 import Button from '@/components/Button';
 
-export default function ShopScreen() {
+export default function WorkoutScreen() {
   return (
+    
     <View style={styles.container}>
-      <Text style={styles.title}>Workouts</Text>
-      <View style={styles.footerContainer}>
-        <Button label="My workouts" />
+      <Text style={styles.title}>My Workouts</Text>
+      <View style={styles.myWorkouts}>
+        <Button label="Create New Workout" />
       </View>
     </View>
   );
@@ -18,21 +19,22 @@ const styles = StyleSheet.create({
     backgroundColor: '#25292e',
   },
   header: {
-    alignItems: 'center',
+    paddingTop: 50, // Pushes it down from the top safely
+    alignItems: 'center', 
   },
   title: {
+    paddingTop: 50,
     color: '#fff',
     textAlign: 'center',
     fontSize: 32,
     fontWeight: 'bold',
-    marginTop: 50,
   },
   content: {
-    flex: 1,
+    flex: 1, // This takes up the remaining space
     justifyContent: 'center',
     alignItems: 'center',
   },
-  footerContainer: {
+  myWorkouts: {
     padding: 2,
     alignItems: 'center',
   },
