@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native';
 import { useRouter } from 'expo-router';
 import { getFirestore, collection, getDocs } from 'firebase/firestore';
-import { db } from '../../firebaseConfig';
-import { RewardType } from '../../navigation/navigationTypes'; 
+import { db } from '../firebaseConfig';
+import { RewardType } from '../navigation/navigationTypes'; 
 
 export default function Claims() {
   const [rewards, setRewards] = useState<RewardType[]>([]);
@@ -45,7 +45,7 @@ export default function Claims() {
         renderItem={({ item }) => (
           <TouchableOpacity 
             style={styles.rewardBox} 
-            onPress={() => router.push({ pathname: "/claims/[rewardId]", params: { rewardId: item.id } })}>
+            onPress={() => router.push({ pathname: "../rewardDetails/[rewardId]", params: { rewardId: item.id } })}>
             <Text style={styles.rewardName}>{item.Name}</Text>
             <Text style={styles.rewardLocation}>{'\n'}IMAGE LOCATION{'\n\n'}</Text>
             <Text style={styles.rewardLocation}>{item.Location}</Text>

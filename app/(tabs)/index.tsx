@@ -6,12 +6,10 @@ export default function ShopScreen() {
     <View style={styles.container}>
       <Text style={styles.title}>Profile</Text>
       <View style={styles.footerContainer}>
-        <View style={styles.buttonContainer}>
-
+        <View style={styles.buttonStyle}>
           <Button label="Balance" />
         </View>
-        <View style={styles.buttonContainer}>
-
+        <View style={styles.buttonStyle}>
           <Button label="Claims" />
         </View>
       </View>
@@ -43,11 +41,10 @@ const styles = StyleSheet.create({
     padding: 2,
     alignItems: 'center',
   },
-  buttonContainer: {
-    padding: 12,
-    
+  buttonStyle: {
+    width: '70%', 
+    marginBottom: 15, 
     alignItems: 'center',
-    marginBottom: 10,
   },
   text: {
     color: '#fff',

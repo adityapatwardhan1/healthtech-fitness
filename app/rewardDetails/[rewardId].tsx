@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator, TouchableOpacity } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { getFirestore, doc, getDoc } from 'firebase/firestore';
-import { db } from '../../firebaseConfig';
+import { db } from '../firebaseConfig';
 import { useNavigation } from '@react-navigation/native';
 
 export default function RewardDetails() {
