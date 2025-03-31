@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, StyleSheet, ActivityIndicator, Image } from 'react-native';
 import { useRouter } from 'expo-router';
 import { getFirestore, collection, getDocs } from 'firebase/firestore';
 import { db } from '../firebaseConfig';
@@ -27,6 +27,21 @@ export default function Claims() {
     fetchRewards();
   }, []);
 
+  const imageMap = (itemName: string) => {
+    try {
+      switch (itemName) {
+        case 'SolidCore':
+          return require('../../assets/images/SolidCore.jpg');
+        case 'test2':
+          return require('../../assets/images/SolidCore.jpg');
+        default:
+          return require('../../assets/images/SolidCore.jpg');
+      }
+    } catch (error) {
+      return require('../../assets/images/SolidCore.jpg');
+    }
+  };
+
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
@@ -42,16 +57,27 @@ export default function Claims() {
       <FlatList
         data={rewards}
         keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <TouchableOpacity 
-            style={styles.rewardBox} 
-            onPress={() => router.push({ pathname: "../rewardDetails/[rewardId]", params: { rewardId: item.id } })}>
-            <Text style={styles.rewardName}>{item.Name}</Text>
-            <Text style={styles.rewardLocation}>{'\n'}IMAGE LOCATION{'\n\n'}</Text>
-            <Text style={styles.rewardLocation}>{item.Location}</Text>
-            <Text style={styles.rewardCost}>{item.Cost} keys</Text>
-          </TouchableOpacity>
-        )}
+        renderItem={({ item }) => {
+          return (
+            <TouchableOpacity
+              style={styles.rewardBox}
+              onPress={() =>
+                router.push({
+                  pathname: "../rewardDetails/[rewardId]",
+                  params: { rewardId: item.id },
+                })
+              }
+            >
+              <Text style={styles.rewardName}>{item.Name}</Text>
+              <Image
+                source={imageMap(item.Name)}
+                style={styles.rewardImage}
+              />
+              <Text style={styles.rewardLocation}>{item.Location}</Text>
+              <Text style={styles.rewardCost}>{item.Cost} keys</Text>
+            </TouchableOpacity>
+          );
+        }}
       />
     </View>
   );
@@ -107,5 +133,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     color: '#000',
+  },
+  rewardImage: {
+    width: 100,       // Set your desired width for the image
+    height: 100,      // Set your desired height for the image
+    borderRadius: 10, // Optional: rounded corners for the image
+    marginVertical: 10, // Optional: space between image and text
   },
 });

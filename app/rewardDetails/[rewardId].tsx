@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ActivityIndicator, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, ActivityIndicator, TouchableOpacity, Image } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { getFirestore, doc, getDoc } from 'firebase/firestore';
 import { db } from '../firebaseConfig';
@@ -34,6 +34,21 @@ export default function RewardDetails() {
     }
   }, [rewardId]);
 
+  const imageMap = (itemName: string) => {
+    try {
+      switch (itemName) {
+        case 'SolidCore':
+          return require('../../assets/images/SolidCore.jpg');
+        case 'test2':
+          return require('../../assets/images/SolidCore.jpg');
+        default:
+          return require('../../assets/images/SolidCore.jpg');
+      }
+    } catch (error) {
+      return require('../../assets/images/SolidCore.jpg');
+    }
+  };
+
   if (loading) {
     return (
       <View style={styles.container}>
@@ -53,16 +68,21 @@ export default function RewardDetails() {
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-        <Text style={styles.backButtonText}>Back</Text>
+        <Image 
+          source={require('../../assets/images/back-button.png')}
+          style={styles.backButtonImage}
+        />
       </TouchableOpacity>
+
+      <Image source={imageMap(reward.Name)} style={styles.rewardImage} />
 
       <Text style={styles.title}>{reward.Name}</Text>
       <Text style={styles.description}>{reward.Description}</Text>
-      <Text style={styles.detailText}>Date: {reward.Date}</Text>
       <Text style={styles.detailText}>Location: {reward.Location}</Text>
-      <Text style={styles.detailText}>Class Name: {reward.ClassName}</Text>
+      <Text style={styles.detailText}>{reward.Date} </Text>
+      <Text style={styles.detailText}>{reward.ClassName} </Text>
       <TouchableOpacity style={styles.claimButton}>
-        <Text style={styles.claimButtonText}>Claim for {reward.Cost} keys</Text>
+        <Text style={styles.claimButtonText}>Book for {reward.Cost} keys</Text>
       </TouchableOpacity>
     </View>
   );
@@ -70,7 +90,7 @@ export default function RewardDetails() {
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 200,  // TODO: CHANGE THIS PADDING ONCE IMAGE ELEMENT IS ADDED
+    paddingTop: 100,
     flex: 1,
     padding: 20,
     backgroundColor: '#fff',
@@ -80,12 +100,13 @@ const styles = StyleSheet.create({
     top: 40,
     left: 20,
     padding: 10,
-    backgroundColor: '#007AFF',
+    // backgroundColor: '#007AFF',
     borderRadius: 5,
   },
-  backButtonText: {
-    color: '#fff',
-    fontSize: 16,
+  backButtonImage: {
+    width: 30,
+    height: 30,
+    tintColor: '#141414',
   },
   title: {
     fontSize: 24,
@@ -115,5 +136,11 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     color: '#000',
+  },
+  rewardImage: {
+    width: '100%',  
+    height: 200,    
+    borderRadius: 10,  
+    marginBottom: 20, 
   },
 });
