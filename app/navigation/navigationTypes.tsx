@@ -4,6 +4,8 @@ export type RewardType = {
     Location: string;
     Cost: number;
     Date: string;
+    ClassName: string;
+    Instructor: string;
     Description: string;
 };
   

@@ -11,6 +11,12 @@ export default function RewardDetails() {
   const [loading, setLoading] = useState(true);
   const navigation = useNavigation();
 
+  const [liked, setLiked] = useState(false);
+
+  const handleHeartPress = () => {
+    setLiked(!liked);
+  };
+
   useEffect(() => {
     const fetchReward = async () => {
       try {
@@ -74,11 +80,18 @@ export default function RewardDetails() {
         />
       </TouchableOpacity>
 
+      <TouchableOpacity style={styles.heartButton} onPress={handleHeartPress}>
+        <Image 
+        source={require('../../assets/images/heart.png')}
+        style={[styles.heartButtonImage, { tintColor: liked ? 'red' : '#141414' }]}
+        />
+      </TouchableOpacity>
+
       <Image source={imageMap(reward.Name)} style={styles.rewardImage} />
 
       <Text style={styles.title}>{reward.Name}</Text>
       <Text style={styles.description}>{reward.Description}</Text>
-      <Text style={styles.detailText}>Location: {reward.Location}</Text>
+      <Text style={styles.detailText}>Location: {reward.Location + " with " + reward.Instructor}</Text>
       <Text style={styles.detailText}>{reward.Date} </Text>
       <Text style={styles.detailText}>{reward.ClassName} </Text>
       <TouchableOpacity style={styles.claimButton}>
@@ -104,6 +117,19 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   backButtonImage: {
+    width: 30,
+    height: 30,
+    tintColor: '#141414',
+  },
+  heartButton: {
+    position: 'absolute',
+    top: 40,
+    left: 330,
+    padding: 10,
+    // backgroundColor: '#007AFF',
+    borderRadius: 5,
+  },
+  heartButtonImage: {
     width: 30,
     height: 30,
     tintColor: '#141414',

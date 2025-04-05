@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, TouchableOpacity, StyleSheet, ActivityIndicator, Image } from 'react-native';
+import { useKey } from '../../context/KeyContext'; 
+import { View, Text, FlatList, TouchableOpacity, StyleSheet, ActivityIndicator, Image, Dimensions } from 'react-native';
 import { useRouter } from 'expo-router';
-import { getFirestore, collection, getDocs } from 'firebase/firestore';
+import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../firebaseConfig';
-import { RewardType } from '../navigation/navigationTypes'; 
+import { RewardType } from '../navigation/navigationTypes';
 
 export default function Claims() {
   const [rewards, setRewards] = useState<RewardType[]>([]);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
+  const { keyBalance, addKeys, subtractKeys } = useKey();
 
   useEffect(() => {
     const fetchRewards = async () => {
@@ -53,42 +55,63 @@ export default function Claims() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Unlock Your GymKeys</Text>
+      <View style={styles.balance}>
+        <View style={styles.whiteBox}>
+          <Image 
+            source={require('../../assets/images/key.png')}
+            style={styles.keyImage}
+          />
+          <Text style={styles.balanceText}>{keyBalance}</Text>
+        </View>
+        
+      </View>
+      {/* test code*/}
+      {/* <TouchableOpacity onPress={() => addKeys(50)}>
+            <Text>Add 5 Keys</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity onPress={() => subtractKeys(2)}>
+            <Text>Use 2 Keys</Text>
+      </TouchableOpacity> */}
+
       <Text style={styles.categories}>Austin Favorites</Text>
       <FlatList
         data={rewards}
         keyExtractor={(item) => item.id}
-        renderItem={({ item }) => {
-          return (
-            <TouchableOpacity
-              style={styles.rewardBox}
-              onPress={() =>
-                router.push({
-                  pathname: "../rewardDetails/[rewardId]",
-                  params: { rewardId: item.id },
-                })
-              }
-            >
+        numColumns={2}
+        columnWrapperStyle={styles.row}
+        renderItem={({ item }) => (
+          <TouchableOpacity
+            style={styles.rewardBox}
+            onPress={() =>
+              router.push({
+                pathname: "../rewardDetails/[rewardId]",
+                params: { rewardId: item.id },
+              })
+            }
+          >
+            <Image source={imageMap(item.Name)} style={styles.rewardImage} />
+            <View style={styles.rewardInfo}>
               <Text style={styles.rewardName}>{item.Name}</Text>
-              <Image
-                source={imageMap(item.Name)}
-                style={styles.rewardImage}
-              />
-              <Text style={styles.rewardLocation}>{item.Location}</Text>
+              <Text style={styles.rewardLocation}>{item.ClassName}</Text>
               <Text style={styles.rewardCost}>{item.Cost} keys</Text>
-            </TouchableOpacity>
-          );
-        }}
+            </View>
+          </TouchableOpacity>
+        )}
       />
     </View>
   );
 }
+
+const windowWidth = Dimensions.get('window').width;
+const boxWidth = (windowWidth - 60) / 2;
 
 const styles = StyleSheet.create({
   container: {
     paddingTop: 40,
     flex: 1,
     backgroundColor: '#eeeeee',
-    padding: 20,
+    paddingHorizontal: 20,
   },
   loadingContainer: {
     flex: 1,
@@ -100,6 +123,7 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     fontSize: 18,
     fontWeight: 'bold',
+    marginBottom: 10,
   },
   title: {
     backgroundColor: '#D9D9D9',
@@ -111,33 +135,78 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 20,
   },
+  row: {
+    justifyContent: 'space-between',
+    marginBottom: 20,
+  },
   rewardBox: {
+    width: boxWidth,
     backgroundColor: '#fff',
-    padding: 15,
-    marginVertical: 8,
-    borderRadius: 10,
+    borderRadius: 25,
+    overflow: 'hidden',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
+    shadowOpacity: 0.1,
     shadowRadius: 4,
   },
+  rewardImage: {
+    width: '100%',
+    height: 110,
+    resizeMode: 'cover',
+  },
+  rewardInfo: {
+    padding: 10,
+  },
   rewardName: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: 'bold',
   },
   rewardLocation: {
-    fontSize: 14,
+    fontSize: 10.5,
     color: '#666',
   },
   rewardCost: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: 'bold',
     color: '#000',
   },
-  rewardImage: {
-    width: 100,       // Set your desired width for the image
-    height: 100,      // Set your desired height for the image
-    borderRadius: 10, // Optional: rounded corners for the image
-    marginVertical: 10, // Optional: space between image and text
+  balance: {
+    paddingLeft: 10,
+    flexDirection: 'row',
+    backgroundColor: '#D9D9D9',
+    borderBottomRightRadius: 5,
+    borderBottomLeftRadius: 5,
+    borderTopRightRadius: 5,
+    borderTopLeftRadius: 5,
+    padding: 5,
+    height: 40,
+    fontWeight: 'bold',
+    marginBottom: 5,
+    width: '25%',
+  },
+  whiteBox: {
+    flexDirection: 'row',
+    backgroundColor: '#fff',
+    borderRadius: 5,
+    width: '100%',
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 8, // Increased vertical padding to prevent text cutoff
+  },
+  keyImage: {
+    width: 30,
+    height: 30,
+    marginRight: 10,
+  },
+  balanceText: {
+    fontSize: 18,
+    backgroundColor: '#fff',
+    textAlign: 'center',
+    lineHeight: 18, // Adjusted lineHeight to raise text
   },
 });
+
+
+
+
