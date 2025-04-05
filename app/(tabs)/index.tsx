@@ -1,8 +1,18 @@
-import { Text, View, StyleSheet, Image, TouchableOpacity, SafeAreaView } from 'react-native';
+import React from 'react';
+import {
+  Text,
+  View,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  SafeAreaView
+} from 'react-native';
+import { useRouter } from 'expo-router';
 
-//import Button from '@/components/Button';
-import Button from '@/components/Button';
 export default function HomeScreen() {
+  // Get the router instance from expo-router
+  const router = useRouter();
+
   return (
     <SafeAreaView style={styles.container}>
       {/* Top header with settings */}
@@ -21,7 +31,14 @@ export default function HomeScreen() {
         <View style={styles.workoutContainer}>
           <Text style={styles.workoutText}>Today's Workout:</Text>
           <Text style={styles.workoutTitle}>Glute-Focused Legs</Text>
-          <TouchableOpacity style={styles.logButton}>
+          <TouchableOpacity
+            style={styles.logButton}
+            onPress={() =>
+              router.push({
+                pathname: '/workouts' // Navigates to workouts.tsx (adjust if your file path differs)
+              })
+            }
+          >
             <Text style={styles.logButtonText}>Log Workout</Text>
           </TouchableOpacity>
         </View>
@@ -30,7 +47,7 @@ export default function HomeScreen() {
         <View style={styles.sectionContainer}>
           <Text style={styles.sectionTitle}>Today's Gymkey</Text>
           <Image
-            source={{ uri: 'https://via.placeholder.com/300x100/0066cc/ffffff' }}
+            source={require('../../assets/images/SolidCore.jpg')}
             style={styles.gymkeyImage}
             resizeMode="cover"
           />
@@ -40,13 +57,13 @@ export default function HomeScreen() {
       {/* Unclaimed Section - fixed position just above navbar */}
       <View style={styles.unclaimedSection}>
         <Text style={styles.sectionTitle}>Unclaimed</Text>
-        <View style={styles.unclaimedBox}></View>
+        <View style={styles.unclaimedBox} />
       </View>
 
       {/* Navigation Bar */}
       <View style={styles.navbar}>
         <TouchableOpacity style={styles.navItem}>
-          <Text style={styles.navIcon}></Text>
+          <Text style={styles.navIcon} />
         </TouchableOpacity>
         <TouchableOpacity style={styles.navItem}>
           <Text style={styles.navIcon}>🏋️</Text>
@@ -129,8 +146,9 @@ const styles = StyleSheet.create({
   },
   gymkeyImage: {
     width: '100%',
-    height: 100,
+    height: 210, // Increased height so the image isn't cut off
     borderRadius: 10,
+    marginVertical: 10, // Adds spacing above and below the image
   },
   unclaimedSection: {
     padding: 15,
@@ -163,3 +181,4 @@ const styles = StyleSheet.create({
     fontSize: 24,
   },
 });
+
