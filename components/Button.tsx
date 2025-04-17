@@ -3,13 +3,14 @@ import { TouchableOpacity, Text, StyleSheet, ViewStyle, TextStyle } from 'react-
 
 interface ButtonProps {
   label: string;
-  style?: ViewStyle; // Allows custom styling for the button container
-  textStyle?: TextStyle; // Allows custom styling for the text inside the button
+  style?: ViewStyle;
+  textStyle?: TextStyle;
+  onPress?: () => void; // Added onPress prop
 }
 
-const Button: React.FC<ButtonProps> = ({ label, style, textStyle }) => {
+const Button: React.FC<ButtonProps> = ({ label, style, textStyle, onPress }) => {
   return (
-    <TouchableOpacity style={[styles.button, style]}>
+    <TouchableOpacity style={[styles.button, style]} onPress={onPress}>
       <Text style={[styles.buttonText, textStyle]}>{label}</Text>
     </TouchableOpacity>
   );
@@ -24,7 +25,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   buttonText: {
-    color: '#fff',
+    color: '#000',
     textAlign: 'center',
     fontSize: 16,
   },
