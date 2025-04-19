@@ -1,5 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useKey } from '../../context/KeyContext'; 
+import { collection, doc, setDoc, addDoc, getDoc } from 'firebase/firestore';
+import { db } from '../firebaseConfig';
+
 import {
   View,
   Text,
@@ -192,13 +195,13 @@ const ExerciseRow = ({
 };
 
 export default function GluteWorkoutPage() {
-  // Date state (preserved from original code)
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [showDropdown, setShowDropdown] = useState(false);
   const { keyBalance, addKeys, subtractKeys } = useKey();
-  
-  // Exercise state
-  const [exercises, setExercises] = useState<Exercise[]>([
+  const [loadingWorkout, setLoadingWorkout] = useState(true);
+
+  // Default exercises to use if no data is found in Firebase
+  const defaultExercises: Exercise[] = [
     { 
       id: '1', 
       name: 'Exercise', 
@@ -222,56 +225,60 @@ export default function GluteWorkoutPage() {
         { weight: '', reps: '', previous: '- -' },
         { weight: '', reps: '', previous: '- -' }
       ]
-    },
-    { 
-      id: '3', 
-      name: 'Exercise', 
-      expanded: false,
-      completed: false, 
-      sets: [
-        { weight: '', reps: '', previous: '- -' },
-        { weight: '', reps: '', previous: '- -' },
-        { weight: '', reps: '', previous: '- -' },
-        { weight: '', reps: '', previous: '- -' }
-      ] 
-    },
-    { 
-      id: '4', 
-      name: 'Exercise', 
-      expanded: false,
-      completed: false, 
-      sets: [
-        { weight: '', reps: '', previous: '- -' },
-        { weight: '', reps: '', previous: '- -' },
-        { weight: '', reps: '', previous: '- -' },
-        { weight: '', reps: '', previous: '- -' }
-      ] 
-    },
-    { 
-      id: '5', 
-      name: 'Exercise', 
-      expanded: false,
-      completed: false, 
-      sets: [
-        { weight: '', reps: '', previous: '- -' },
-        { weight: '', reps: '', previous: '- -' },
-        { weight: '', reps: '', previous: '- -' },
-        { weight: '', reps: '', previous: '- -' }
-      ] 
-    },
-    { 
-      id: '6', 
-      name: 'Exercise', 
-      expanded: false,
-      completed: false, 
-      sets: [
-        { weight: '', reps: '', previous: '- -' },
-        { weight: '', reps: '', previous: '- -' },
-        { weight: '', reps: '', previous: '- -' },
-        { weight: '', reps: '', previous: '- -' }
-      ] 
-    },
-  ]);
+    }
+  ];
+
+  const [exercises, setExercises] = useState<Exercise[]>(defaultExercises);
+
+  // Function to load workout data from Firebase
+  const loadWorkoutFromFirebase = async (date: Date) => {
+    setLoadingWorkout(true);
+    const dummyUserId = "test_user_001";
+    const docId = date.toISOString().split('T')[0]; 
+
+    try {
+      const workoutDoc = await getDoc(doc(db, 'users', dummyUserId, 'workouts', docId));
+      
+      if (workoutDoc.exists()) {
+        const workoutData = workoutDoc.data();
+        console.log(`✅ Workout loaded for date: ${docId}`);
+        setExercises(workoutData.exercises || defaultExercises);
+      } else {
+        console.log(`ℹ️ No workout found for date: ${docId}, using default exercises`);
+        setExercises(defaultExercises);
+      }
+    } catch (error) {
+      console.error("❌ Error loading workout:", error);
+      setExercises(defaultExercises);
+    } finally {
+      setLoadingWorkout(false);
+    }
+  };
+
+  // Load data when the date changes
+  useEffect(() => {
+    loadWorkoutFromFirebase(selectedDate);
+  }, [selectedDate]);
+
+  const saveWorkoutToFirebase = async (exData?: Exercise[]) => {
+    const dummyUserId = "test_user_001";
+    const docId = selectedDate.toISOString().split('T')[0]; 
+    const dataToSave = exData || exercises;
+  
+    try {
+      await setDoc(
+        doc(db, 'users', dummyUserId, 'workouts', docId),
+        {
+          date: selectedDate.toISOString(),
+          exercises: dataToSave,
+          completed: true,
+        }
+      );
+      console.log(`✅ Workout saved with ID: ${docId}`);
+    } catch (error) {
+      console.error("❌ Error saving workout:", error);
+    }
+  };
 
   // Edit modal state
   const [showEditModal, setShowEditModal] = useState(false);
@@ -388,12 +395,17 @@ export default function GluteWorkoutPage() {
 
   const saveEditedExercise = () => {
     if (editExerciseId) {
-      setExercises(exercises.map(ex => 
+      const updatedExercises = exercises.map(ex =>
         ex.id === editExerciseId ? { ...ex, name: editExerciseName } : ex
-      ));
+      );
+      
+      setExercises(updatedExercises);
+      saveWorkoutToFirebase(updatedExercises);
     }
+  
     setShowEditModal(false);
   };
+  
 
   const skipExercise = (id: string) => {
     // Option 1: Hide exercise
@@ -576,34 +588,45 @@ export default function GluteWorkoutPage() {
       <Text style={styles.titleSmall}>Today's Workout:</Text>
       <Text style={styles.titleBig}>Glute-Focused Legs</Text>
 
-      <ScrollView style={styles.exerciseList}>
-        {exercises.map(exercise => (
-          <ExerciseRow 
-            key={exercise.id} 
-            exercise={exercise} 
-            onToggleExpand={toggleExpand}
-            onUpdateSet={updateSet}
-            onAddSet={addSet}
-            onToggleComplete={toggleComplete}
-            onEditExercise={editExercise}
-            onSkipExercise={skipExercise}
-          />
-        ))}
+      {loadingWorkout ? (
+        <View style={styles.loadingContainer}>
+          <Text style={styles.loadingText}>Loading workout...</Text>
+        </View>
+      ) : (
+        <ScrollView style={styles.exerciseList}>
+          {exercises.map(exercise => (
+            <ExerciseRow 
+              key={exercise.id} 
+              exercise={exercise} 
+              onToggleExpand={toggleExpand}
+              onUpdateSet={updateSet}
+              onAddSet={addSet}
+              onToggleComplete={toggleComplete}
+              onEditExercise={editExercise}
+              onSkipExercise={skipExercise}
+            />
+          ))}
 
-        {/* Add Exercise button */}
-        <TouchableOpacity 
-          style={styles.addExerciseButton}
-          onPress={addExercise}
-        >
-          <Text style={styles.addExerciseText}>+ Add Exercise</Text>
-        </TouchableOpacity>
-        
-        {/* Finish Workout button */}
-        <TouchableOpacity 
-            style={styles.finishButton} onPress={() => addKeys(100)}>
+          {/* Add Exercise button */}
+          <TouchableOpacity 
+            style={styles.addExerciseButton}
+            onPress={addExercise}
+          >
+            <Text style={styles.addExerciseText}>+ Add Exercise</Text>
+          </TouchableOpacity>
+          
+          {/* Finish Workout button */}
+          <TouchableOpacity 
+            style={styles.finishButton} 
+            onPress={() => {
+              saveWorkoutToFirebase();
+              addKeys(100);
+            }}
+          >
             <Text style={styles.finishButtonText}>Finish Workout</Text>
           </TouchableOpacity>
         </ScrollView>
+      )}
 
       {/* Bottom Nav */}
       <View style={styles.nav}>
@@ -988,4 +1011,16 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     fontSize: 12,
   },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#919191', // Match background
+  },
+  loadingText: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: '600',
+  },
+  
 });
