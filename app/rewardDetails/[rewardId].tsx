@@ -153,7 +153,7 @@ const styles = StyleSheet.create({
     bottom: 20,
     left: 20,
     right: 20,
-    backgroundColor: '#D3D3D3',
+    backgroundColor: '#4004A4', // set this to dark purple
     padding: 15,
     borderRadius: 10,
     alignItems: 'center',
@@ -161,7 +161,7 @@ const styles = StyleSheet.create({
   claimButtonText: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#000',
+    color: '#fff',
   },
   rewardImage: {
     width: '100%',  

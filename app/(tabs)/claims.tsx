@@ -47,7 +47,7 @@ export default function Claims() {
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#0000ff" />
+        <ActivityIndicator size="large" color="#5E35B1" />
       </View>
     );
   }
@@ -66,13 +66,13 @@ export default function Claims() {
         
       </View>
       {/* test code*/}
-      <TouchableOpacity onPress={() => addKeys(50)}>
+      {/* <TouchableOpacity onPress={() => addKeys(50)}>
             <Text>Add 5 Keys</Text>
       </TouchableOpacity>
 
       <TouchableOpacity onPress={() => subtractKeys(2)}>
             <Text>Use 2 Keys</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
 
       <Text style={styles.categories}>Austin Favorites</Text>
       <FlatList
@@ -110,23 +110,24 @@ const styles = StyleSheet.create({
   container: {
     paddingTop: 40,
     flex: 1,
-    backgroundColor: '#eeeeee',
+    backgroundColor: '#FFFFFF',
     paddingHorizontal: 20,
   },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: '#FFFFFF',
   },
   categories: {
     textAlign: 'left',
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 10,
+    color: '#000000',
   },
   title: {
-    backgroundColor: '#D9D9D9',
+    backgroundColor: '#D5C7FF',
     borderBottomRightRadius: 5,
     borderBottomLeftRadius: 5,
     textAlign: 'center',
@@ -134,6 +135,7 @@ const styles = StyleSheet.create({
     padding: 20,
     fontWeight: 'bold',
     marginBottom: 20,
+    color: '#5E35B1',
   },
   row: {
     justifyContent: 'space-between',
@@ -141,8 +143,8 @@ const styles = StyleSheet.create({
   },
   rewardBox: {
     width: boxWidth,
-    backgroundColor: '#fff',
-    borderRadius: 25,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 20,
     overflow: 'hidden',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
@@ -160,20 +162,21 @@ const styles = StyleSheet.create({
   rewardName: {
     fontSize: 16,
     fontWeight: 'bold',
+    color: '#000000',
   },
   rewardLocation: {
     fontSize: 10.5,
-    color: '#666',
+    color: '#5E35B1',
   },
   rewardCost: {
     fontSize: 14,
     fontWeight: 'bold',
-    color: '#000',
+    color: '#5E35B1',
   },
   balance: {
     paddingLeft: 10,
     flexDirection: 'row',
-    backgroundColor: '#D9D9D9',
+    backgroundColor: '#D5C7FF',
     borderBottomRightRadius: 5,
     borderBottomLeftRadius: 5,
     borderTopRightRadius: 5,
@@ -192,21 +195,19 @@ const styles = StyleSheet.create({
     height: '100%',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingVertical: 8, // Increased vertical padding to prevent text cutoff
+    paddingVertical: 8,
   },
   keyImage: {
     width: 30,
     height: 30,
     marginRight: 10,
+    tintColor: '#5E35B1',
   },
   balanceText: {
     fontSize: 18,
     backgroundColor: '#fff',
     textAlign: 'center',
-    lineHeight: 18, // Adjusted lineHeight to raise text
+    lineHeight: 18,
+    color: '#5E35B1',
   },
 });
-
-
-
-

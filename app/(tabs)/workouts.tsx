@@ -618,12 +618,14 @@ export default function GluteWorkoutPage() {
 const styles = StyleSheet.create({
   container: { 
     flex: 1, 
-    backgroundColor: '#919191', // Updated to gray like in the screenshot
+    backgroundColor: '#d1d1d1', // Updated to gray like in the screenshot
   },
   headerWrapper: {
     marginBottom: 10,
     paddingHorizontal: 20,
     paddingTop: 20,
+    paddingBottom: 10,
+    backgroundColor: '#919191', // Changed to match gray header
   },
   header: {
     backgroundColor: '#919191', // Changed to match gray header
