@@ -66,13 +66,13 @@ export default function Claims() {
         
       </View>
       {/* test code*/}
-      {/* <TouchableOpacity onPress={() => addKeys(50)}>
+      <TouchableOpacity onPress={() => addKeys(50)}>
             <Text>Add 5 Keys</Text>
       </TouchableOpacity>
 
       <TouchableOpacity onPress={() => subtractKeys(2)}>
             <Text>Use 2 Keys</Text>
-      </TouchableOpacity> */}
+      </TouchableOpacity>
 
       <Text style={styles.categories}>Austin Favorites</Text>
       <FlatList

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useKey } from '../../context/KeyContext'; 
 import {
   View,
   Text,
@@ -194,6 +195,7 @@ export default function GluteWorkoutPage() {
   // Date state (preserved from original code)
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [showDropdown, setShowDropdown] = useState(false);
+  const { keyBalance, addKeys, subtractKeys } = useKey();
   
   // Exercise state
   const [exercises, setExercises] = useState<Exercise[]>([
@@ -597,10 +599,11 @@ export default function GluteWorkoutPage() {
         </TouchableOpacity>
         
         {/* Finish Workout button */}
-        <TouchableOpacity style={styles.finishButton}>
-          <Text style={styles.finishButtonText}>Finish Workout</Text>
-        </TouchableOpacity>
-      </ScrollView>
+        <TouchableOpacity 
+            style={styles.finishButton} onPress={() => addKeys(100)}>
+            <Text style={styles.finishButtonText}>Finish Workout</Text>
+          </TouchableOpacity>
+        </ScrollView>
 
       {/* Bottom Nav */}
       <View style={styles.nav}>
