@@ -8,10 +8,12 @@ import {
   SafeAreaView
 } from 'react-native';
 import { useRouter } from 'expo-router';
+import { useKey } from '../../context/KeyContext'; 
 
 export default function HomeScreen() {
   // Get the router instance from expo-router
   const router = useRouter();
+  const { keyBalance, addKeys, subtractKeys } = useKey();
 
   return (
     <SafeAreaView style={styles.container}>
@@ -21,7 +23,7 @@ export default function HomeScreen() {
           <Text style={styles.settingsIcon}>⚙️</Text>
         </TouchableOpacity>
         <View style={styles.pointsContainer}>
-          <Text style={styles.pointsText}>450</Text>
+          <Text style={styles.pointsText}>{keyBalance}</Text>
         </View>
       </View>
 

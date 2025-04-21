@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, ActivityIndicator, TouchableOpacity, Image } fr
 import { useLocalSearchParams } from 'expo-router';
 import { getFirestore, doc, getDoc } from 'firebase/firestore';
 import { db } from '../firebaseConfig';
+import { useKey } from '../../context/KeyContext'; 
 import { useNavigation } from '@react-navigation/native';
 
 export default function RewardDetails() {
@@ -10,6 +11,7 @@ export default function RewardDetails() {
   const [reward, setReward] = useState<any>(null); 
   const [loading, setLoading] = useState(true);
   const navigation = useNavigation();
+  const { keyBalance, addKeys, subtractKeys } = useKey();
 
   const [liked, setLiked] = useState(false);
 
@@ -94,7 +96,9 @@ export default function RewardDetails() {
       <Text style={styles.detailText}>Location: {reward.Location + " with " + reward.Instructor}</Text>
       <Text style={styles.detailText}>{reward.Date} </Text>
       <Text style={styles.detailText}>{reward.ClassName} </Text>
-      <TouchableOpacity style={styles.claimButton}>
+      <TouchableOpacity
+        style={styles.claimButton}
+        onPress={() => {subtractKeys(reward.Cost);}}>
         <Text style={styles.claimButtonText}>Book for {reward.Cost} keys</Text>
       </TouchableOpacity>
     </View>
