@@ -199,6 +199,7 @@ export default function GluteWorkoutPage() {
   const [showDropdown, setShowDropdown] = useState(false);
   const { keyBalance, addKeys, subtractKeys } = useKey();
   const [loadingWorkout, setLoadingWorkout] = useState(true);
+  const [showFinishMessage, setShowFinishMessage] = useState(false);
 
   // Default exercises to use if no data is found in Firebase
   const defaultExercises: Exercise[] = [
@@ -621,6 +622,8 @@ export default function GluteWorkoutPage() {
             onPress={() => {
               saveWorkoutToFirebase();
               addKeys(100);
+              setShowFinishMessage(true);
+              setTimeout(() => setShowFinishMessage(false), 3000);
             }}
           >
             <Text style={styles.finishButtonText}>Finish Workout</Text>
@@ -634,8 +637,16 @@ export default function GluteWorkoutPage() {
           <Text key={idx} style={styles.navIcon}>{icon}</Text>
         ))}
       </View>
+
+      {showFinishMessage && (
+  <View style={styles.finishOverlay}>
+    <Text style={styles.finishMessageText}>🎉 Workout Complete! +100 Keys</Text>
+  </View>
+)}
+
     </SafeAreaView>
   );
+  
 }
 
 const styles = StyleSheet.create({
@@ -1021,6 +1032,23 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 18,
     fontWeight: '600',
+  },
+  finishOverlay: {
+    position: 'absolute',
+    bottom: 100,
+    left: 20,
+    right: 20,
+    backgroundColor: '#4004A4',
+    padding: 15,
+    borderRadius: 20,
+    alignItems: 'center',
+    zIndex: 100,
+  },
+  
+  finishMessageText: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: 'bold',
   },
   
 });

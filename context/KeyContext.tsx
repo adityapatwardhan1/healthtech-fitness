@@ -14,7 +14,7 @@ type KeyProviderProps = {
 };
 
 export const KeyProvider = ({ children }: KeyProviderProps) => {
-  const [keyBalance, setKeyBalance] = useState(10);
+  const [keyBalance, setKeyBalance] = useState(100);
 
   const addKeys = (amount: number) => {
     setKeyBalance((prev) => prev + amount)

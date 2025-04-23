@@ -34,8 +34,14 @@ export default function Claims() {
       switch (itemName) {
         case 'SolidCore':
           return require('../../assets/images/SolidCore.jpg');
-        case 'test2':
-          return require('../../assets/images/SolidCore.jpg');
+        case 'SoulCycle':
+          return require('../../assets/images/SoulCycle.png');
+        case 'Diva Dance':
+          return require('../../assets/images/DivaDance.png');
+        case 'PeachBurn':
+          return require('../../assets/images/PeachBurn.png');
+        case 'Pure Barre':
+          return require('../../assets/images/PureBarre.png');
         default:
           return require('../../assets/images/SolidCore.jpg');
       }

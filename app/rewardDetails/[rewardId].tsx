@@ -1,19 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useRef } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator, TouchableOpacity, Image } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
-import { getFirestore, doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc } from 'firebase/firestore';
 import { db } from '../firebaseConfig';
 import { useKey } from '../../context/KeyContext'; 
 import { useNavigation } from '@react-navigation/native';
+import LottieView from 'lottie-react-native';
 
 export default function RewardDetails() {
   const { rewardId } = useLocalSearchParams();
   const [reward, setReward] = useState<any>(null); 
   const [loading, setLoading] = useState(true);
+  const animationRef = useRef<LottieView>(null);
   const navigation = useNavigation();
-  const { keyBalance, addKeys, subtractKeys } = useKey();
+  const { keyBalance, subtractKeys } = useKey();
 
   const [liked, setLiked] = useState(false);
+  const [showUnlockAnimation, setShowUnlockAnimation] = useState(false);
 
   const handleHeartPress = () => {
     setLiked(!liked);
@@ -47,14 +50,33 @@ export default function RewardDetails() {
       switch (itemName) {
         case 'SolidCore':
           return require('../../assets/images/SolidCore.jpg');
-        case 'test2':
-          return require('../../assets/images/SolidCore.jpg');
+        case 'SoulCycle':
+          return require('../../assets/images/SoulCycle.png');
+        case 'Diva Dance':
+          return require('../../assets/images/DivaDance.png');
+        case 'PeachBurn':
+          return require('../../assets/images/PeachBurn.png');
+        case 'Pure Barre':
+          return require('../../assets/images/PureBarre.png');
         default:
           return require('../../assets/images/SolidCore.jpg');
       }
     } catch (error) {
       return require('../../assets/images/SolidCore.jpg');
     }
+  };
+
+  const handleClaim = () => {
+    subtractKeys(reward.Cost);
+    setShowUnlockAnimation(true);
+  
+    setTimeout(() => {
+      animationRef.current?.play(0, 250);
+    }, 0);
+  
+    setTimeout(() => {
+      setShowUnlockAnimation(false);
+    }, 2000);
   };
 
   if (loading) {
@@ -84,8 +106,8 @@ export default function RewardDetails() {
 
       <TouchableOpacity style={styles.heartButton} onPress={handleHeartPress}>
         <Image 
-        source={require('../../assets/images/heart.png')}
-        style={[styles.heartButtonImage, { tintColor: liked ? 'red' : '#141414' }]}
+          source={require('../../assets/images/heart.png')}
+          style={[styles.heartButtonImage, { tintColor: liked ? 'red' : '#141414' }]}
         />
       </TouchableOpacity>
 
@@ -94,13 +116,28 @@ export default function RewardDetails() {
       <Text style={styles.title}>{reward.Name}</Text>
       <Text style={styles.description}>{reward.Description}</Text>
       <Text style={styles.detailText}>Location: {reward.Location + " with " + reward.Instructor}</Text>
-      <Text style={styles.detailText}>{reward.Date} </Text>
-      <Text style={styles.detailText}>{reward.ClassName} </Text>
+      <Text style={styles.detailText}>{reward.Date}</Text>
+      <Text style={styles.detailText}>{reward.ClassName}</Text>
+
       <TouchableOpacity
         style={styles.claimButton}
-        onPress={() => {subtractKeys(reward.Cost);}}>
+        onPress={handleClaim}>
         <Text style={styles.claimButtonText}>Book for {reward.Cost} keys</Text>
       </TouchableOpacity>
+
+      {showUnlockAnimation && (
+        <View style={styles.animationOverlay}>
+          <LottieView
+            ref={animationRef}
+            source={require('../../assets/animations/unlock-padlock.json')}
+            loop={false}
+            speed={2}
+            style={{ width: 200, height: 200 }}
+            
+          />
+          <Text style={styles.claimText}>GymKey claimed!</Text>
+        </View>
+      )}
     </View>
   );
 }
@@ -117,7 +154,6 @@ const styles = StyleSheet.create({
     top: 40,
     left: 20,
     padding: 10,
-    // backgroundColor: '#007AFF',
     borderRadius: 5,
   },
   backButtonImage: {
@@ -130,7 +166,6 @@ const styles = StyleSheet.create({
     top: 40,
     left: 330,
     padding: 10,
-    // backgroundColor: '#007AFF',
     borderRadius: 5,
   },
   heartButtonImage: {
@@ -157,7 +192,7 @@ const styles = StyleSheet.create({
     bottom: 20,
     left: 20,
     right: 20,
-    backgroundColor: '#4004A4', // set this to dark purple
+    backgroundColor: '#4004A4',
     padding: 15,
     borderRadius: 10,
     alignItems: 'center',
@@ -168,9 +203,32 @@ const styles = StyleSheet.create({
     color: '#fff',
   },
   rewardImage: {
-    width: '100%',  
-    height: 200,    
-    borderRadius: 10,  
-    marginBottom: 20, 
+    width: '100%',
+    height: 200,
+    borderRadius: 10,
+    marginBottom: 20,
   },
+  animationOverlay: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: 'rgba(0,0,0,0.8)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 100,
+  },
+  claimText: {
+    marginTop: 20,
+    fontSize: 22,
+    fontWeight: 'bold',
+    color: '#fff',
+    backgroundColor: '#4004A4',
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 20,
+    overflow: 'hidden',
+  },
+  
 });
