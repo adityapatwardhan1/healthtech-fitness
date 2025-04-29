@@ -10,7 +10,7 @@ export default function Claims() {
   const [rewards, setRewards] = useState<RewardType[]>([]);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
-  const { keyBalance, addKeys, subtractKeys } = useKey();
+  const { keyBalance} = useKey();
 
   useEffect(() => {
     const fetchRewards = async () => {

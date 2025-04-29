@@ -11,9 +11,8 @@ import { useRouter } from 'expo-router';
 import { useKey } from '../../context/KeyContext'; 
 
 export default function HomeScreen() {
-  // Get the router instance from expo-router
   const router = useRouter();
-  const { keyBalance, addKeys, subtractKeys } = useKey();
+  const { keyBalance } = useKey();
 
   return (
     <SafeAreaView style={styles.container}>
@@ -47,11 +46,7 @@ export default function HomeScreen() {
             <Text style={styles.workoutTitle}>Glute-Focused Legs</Text>
             <TouchableOpacity
               style={styles.logButton}
-              onPress={() =>
-                router.push({
-                  pathname: '/workouts'
-                })
-              }
+              onPress={() => router.push({ pathname: '/workouts' })}
             >
               <Text style={styles.logButtonText}>Log Workout</Text>
             </TouchableOpacity>

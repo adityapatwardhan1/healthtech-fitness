@@ -1,58 +1,47 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { onSnapshot, doc, updateDoc, increment } from 'firebase/firestore';
+import { db } from '../app/firebaseConfig';
 
-type KeyContextType = {
+const DUMMY_USER_ID = "test_user_001";
+
+interface KeyContextData {
   keyBalance: number;
-  setKeyBalance: (balance: number) => void;
-  addKeys: (amount: number) => void;
-  subtractKeys: (amount: number) => void;
-};
+  addKeys: (amt: number) => Promise<void>;
+  subtractKeys: (amt: number) => Promise<void>;
+}
 
-const KeyContext = createContext<KeyContextType | undefined>(undefined);
-
-type KeyProviderProps = {
+interface KeyProviderProps {
   children: ReactNode;
-};
+}
 
-export const KeyProvider = ({ children }: KeyProviderProps) => {
-  const [keyBalance, setKeyBalance] = useState(100);
+const KeyContext = createContext<KeyContextData>({} as KeyContextData);
 
-  const addKeys = (amount: number) => {
-    setKeyBalance((prev) => prev + amount)
-  }
+export function KeyProvider({ children }: KeyProviderProps) {
+  const [keyBalance, setKeyBalance] = useState<number>(0);
 
-  const subtractKeys = (amount: number) => {
-    setKeyBalance((prev) => prev = Math.max(0, prev - amount))
-  }
+  useEffect(() => {
+    const userRef = doc(db, 'users', DUMMY_USER_ID);
+    const unsub = onSnapshot(userRef, snap => {
+      setKeyBalance(snap.data()?.keys ?? 0);
+    });
+    return () => unsub();
+  }, []);
 
+  const addKeys = async (amt: number) => {
+    const userRef = doc(db, 'users', DUMMY_USER_ID);
+    await updateDoc(userRef, { keys: increment(amt) });
+  };
+
+  const subtractKeys = async (amt: number) => {
+    const userRef = doc(db, 'users', DUMMY_USER_ID);
+    await updateDoc(userRef, { keys: increment(-amt) });
+  };
 
   return (
-    <KeyContext.Provider value={{ keyBalance, setKeyBalance, addKeys, subtractKeys }}>
+    <KeyContext.Provider value={{ keyBalance, addKeys, subtractKeys }}>
       {children}
     </KeyContext.Provider>
   );
-};
+}
 
-export const useKey = () => {
-  const context = useContext(KeyContext);
-  if (!context) throw new Error("useKey must be used within a KeyProvider");
-  return context;
-};
-
-{/*HOW TO USE
-    import { useKey } from '../../context/KeyContext'; // at top
-
-    const { keyBalance, addKeys, subtractKeys } = useKey(); //add in page function, before return
-
-    Sample of how you can use the keys (place inside of<View> container):
-          <Text>Your Balance: {keyBalance} keys</Text>
-    
-          <TouchableOpacity onPress={() => addKeys(5)}>
-            <Text>Add 5 Keys</Text>
-          </TouchableOpacity>
-    
-          <TouchableOpacity onPress={() => subtractKeys(2)}>
-            <Text>Use 2 Keys</Text>
-          </TouchableOpacity>
-
-    
-    */}
+export const useKey = () => useContext(KeyContext);
