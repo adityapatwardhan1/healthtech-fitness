@@ -1,7 +1,79 @@
-TX Convergent 2025 Tech Stack:
-- Used React Native and Expo go for the frontend
-- Used Firebase for backend, to store user data (workouts, key balance) and store information about partners (cost of their key, details)
+🏋️‍♂️ GymKey
+GymKey is a mobile app that gamifies fitness by turning your workouts into rewards. Track your progress, earn "keys," and unlock exclusive perks like item discounts or free gym weekends — all from your phone.
 
-Our product is an easy to use app that allows users to track their daily workouts and customize it to their needs. After they finish their workout, they earn keys that allow them to obtain discounts on classes, free day passes to gyms, and discounts on local healthy eateries. 
+🎥 Tech Demo
+📽️ Check out our full tech demo and design walkthrough on Canva:
+🔗 [Watch Here](https://www.canva.com/design/DAGkpjjz2vU/aJ34JCEmjScp3DzItdt4tQ/edit)
 
-You can use the app yourself using Expo Go, using the command 'npx expo --tunnel'.
+🚀 Features
+📈 Workout Tracking: Log your gym sessions and track performance.
+
+🔑 Key System: Earn keys based on consistency and intensity of workouts.
+
+🎁 Unlock Rewards: Use your keys to redeem discounts, merchandise, and special access.
+
+🗝️ User Dashboard: See your workout history, key balance, and available rewards.
+
+🏆 Goal Motivation: Get motivated with achievable, real-world incentives.
+
+🛠 Tech Stack
+Frontend: React Native
+
+Backend & Database: Firebase
+
+Firebase Authentication
+
+Cloud Firestore
+
+Firebase Functions (optional for future scaling)
+
+📲 Getting Started
+Prerequisites
+Node.js (v16+)
+
+Expo CLI or React Native CLI
+
+Firebase project set up
+
+Installation
+Clone the repo:
+
+bash
+Copy
+Edit
+git clone https://github.com/your-username/GymKey.git
+cd GymKey
+Install dependencies:
+
+bash
+Copy
+Edit
+npm install
+Set up Firebase:
+
+Create a Firebase project at firebase.google.com
+
+Enable Authentication and Firestore
+
+Copy your Firebase config into a firebaseConfig.js file
+
+Run the app:
+
+bash
+Copy
+Edit
+npx expo start
+📦 Folder Structure
+bash
+Copy
+Edit
+/GymKey
+├── /components
+├── /screens
+├── /firebase
+│   └── firebaseConfig.js
+├── App.js
+└── ...
+📜 License
+MIT License. See LICENSE for details.
+
